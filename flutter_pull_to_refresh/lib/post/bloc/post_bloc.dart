@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_pull_to_refresh/post/model/post_model.dart';
 import 'package:flutter_pull_to_refresh/post/service/post_api_service.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 part 'post_event.dart';
 
@@ -21,22 +20,33 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<LoadPostsEvent>(_fetchPosts);
   }
 
-
-
-
-
   void _fetchPosts(LoadPostsEvent event, Emitter<PostState> emit) async {
     emit(LoadingPostState());
 
+    final dio = Dio(
+      BaseOptions(
+          baseUrl: "https://jsonplaceholder.typicode.com/",
+          connectTimeout: 10000,
+          contentType: "application/json"),
+    );
+    dio.interceptors.addAll(
+      [
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+        ),
+      ],
+    );
 
-
-    final client =
-        PostClient(Dio(BaseOptions(contentType: "application/json")));
+    final client = PostClient(dio);
     if (event.isRefresh) {
       _start = 0;
       stopLoadMorePost = false;
       posts = [];
     }
+
     try {
       List<PostModel> result = await client.getPosts(_start, _limit);
 
@@ -50,7 +60,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
       _start += _limit;
       emit(LoadPostSuccessState());
-    } catch (_) {
+    } catch (e) {
       emit(LoadPostSuccessState());
     }
   }
