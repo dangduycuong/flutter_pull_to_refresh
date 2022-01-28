@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pull_to_refresh/post/bloc/post_bloc.dart';
 import 'package:flutter_pull_to_refresh/post/model/post_model.dart';
+import 'package:flutter_pull_to_refresh/post/view/post_detail_page.dart';
 import 'package:flutter_pull_to_refresh/post/view/test.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -50,19 +51,21 @@ class _PostsListViewState extends State<PostsListView> {
   Widget _buildCell(PostModel item) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, DraggableLoadingBottomSheet.routeName);
+        Navigator.pushNamed(context, PostDetailPage.routeName, arguments: item);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
-            // color: Colors.blue.withOpacity(0.3),
-            color: Colors.deepOrange.shade900,
+            color: Colors.blue.withOpacity(0.8),
             borderRadius: BorderRadius.circular(8)),
         child: Row(
           children: [
             const SizedBox(width: 8),
-            Text('${item.id}'),
+            Text('${item.id}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),

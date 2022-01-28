@@ -21,8 +21,15 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<LoadPostsEvent>(_fetchPosts);
   }
 
+
+
+
+
   void _fetchPosts(LoadPostsEvent event, Emitter<PostState> emit) async {
     emit(LoadingPostState());
+
+
+
     final client =
         PostClient(Dio(BaseOptions(contentType: "application/json")));
     if (event.isRefresh) {
@@ -32,6 +39,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
     try {
       List<PostModel> result = await client.getPosts(_start, _limit);
+
       if (result.isEmpty) {
         stopLoadMorePost = true;
       }

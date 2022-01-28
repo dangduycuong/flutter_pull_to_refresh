@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pull_to_refresh/post/view/post_detail_page.dart';
 import 'package:flutter_pull_to_refresh/post/view/posts_list_page.dart';
 import 'package:flutter_pull_to_refresh/post/view/test.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         DraggableLoadingBottomSheet.routeName: (context) =>
             const DraggableLoadingBottomSheet(),
+        PostDetailPage.routeName: (context) => const PostDetailPage(),
       },
       home: const PostsListPage(),
     );
